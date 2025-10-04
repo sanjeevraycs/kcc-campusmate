@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import VerifyOTP from "./pages/VerifyOTP";
 import Dashboard from "./pages/Dashboard";
 import Timetable from "./pages/Timetable";
@@ -27,7 +28,7 @@ const queryClient = new QueryClient();
 
 const AppContent = () => {
   const location = useLocation();
-  const noNavPaths = ["/", "/login", "/verify-otp"];
+  const noNavPaths = ["/", "/login", "/signup", "/verify-otp"];
   const showBottomNav = !noNavPaths.includes(location.pathname);
 
   return (
@@ -35,6 +36,7 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/verify-otp" element={<VerifyOTP />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/timetable" element={<Timetable />} />

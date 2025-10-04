@@ -6,26 +6,88 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { GraduationCap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Login = () => {
-  const [rollNumber, setRollNumber] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const validatePhoneNumber = (phone: string) => {
+    const phoneRegex = /^[6-9]\d{9}$/;
+    return phoneRegex.test(phone);
+  };
 
   const handleSendOTP = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate OTP sending
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const isPhone = /^\d+$/.test(identifier);
+
+      if (isPhone && !validatePhoneNumber(identifier)) {
+        toast({
+          title: "Invalid Phone Number",
+          description: "Please enter a valid 10-digit Indian phone number starting with 6-9.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      const query = isPhone
+        ? supabase.from("users").select("*").eq("phone_number", identifier)
+        : supabase.from("users").select("*").eq("roll_number", identifier);
+
+      const { data: user, error } = await query.maybeSingle();
+
+      if (error) throw error;
+
+      if (!user) {
+        toast({
+          title: "User Not Found",
+          description: "No account found with this phone number or roll number. Please sign up first.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+
+      const { error: updateError } = await supabase
+        .from("users")
+        .update({
+          current_otp: otp,
+          otp_expires_at: otpExpiresAt,
+        })
+        .eq("id", user.id);
+
+      if (updateError) throw updateError;
+
       toast({
         title: "OTP Sent",
-        description: "Check your registered phone number for the verification code.",
+        description: `Verification code ${otp} sent to ${user.phone_number}`,
       });
-      navigate("/verify-otp", { state: { rollNumber } });
-    }, 1500);
+
+      navigate("/verify-otp", {
+        state: {
+          phoneNumber: user.phone_number,
+          userId: user.id,
+          isSignup: false
+        }
+      });
+    } catch (error: any) {
+      toast({
+        title: "Login Failed",
+        description: error.message || "An error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -51,13 +113,13 @@ const Login = () => {
           <CardContent>
             <form onSubmit={handleSendOTP} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="rollNumber">Roll Number / Phone Number</Label>
+                <Label htmlFor="identifier">Roll Number / Phone Number</Label>
                 <Input
-                  id="rollNumber"
+                  id="identifier"
                   type="text"
-                  placeholder="Enter your roll number"
-                  value={rollNumber}
-                  onChange={(e) => setRollNumber(e.target.value)}
+                  placeholder="Enter your roll number or phone number"
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
                   required
                   className="h-12 text-base"
                 />
@@ -69,10 +131,15 @@ const Login = () => {
               >
                 {isLoading ? "Sending..." : "Send OTP"}
               </Button>
-              <div className="text-center text-sm text-muted-foreground">
-                <a href="#" className="text-primary hover:underline">
-                  Need help?
-                </a>
+              <div className="text-center text-sm">
+                <span className="text-muted-foreground">Don't have an account? </span>
+                <button
+                  type="button"
+                  onClick={() => navigate("/signup")}
+                  className="text-primary hover:underline font-medium"
+                >
+                  Sign Up
+                </button>
               </div>
             </form>
           </CardContent>
