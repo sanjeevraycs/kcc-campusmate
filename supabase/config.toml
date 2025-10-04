@@ -1,1 +1,13 @@
 project_id = "uuybvjtiiqpdlkphdjdc"
+
+[functions.ai-summarize-notice]
+verify_jwt = true
+
+[functions.ai-predict-attendance]
+verify_jwt = true
+
+[functions.ai-recommend-marketplace]
+verify_jwt = true
+
+[functions.ai-smart-reply]
+verify_jwt = true

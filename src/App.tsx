@@ -16,6 +16,10 @@ import Elections from "./pages/Elections";
 import GateLogs from "./pages/GateLogs";
 import LostFound from "./pages/LostFound";
 import QuickLinks from "./pages/QuickLinks";
+import Attendance from "./pages/Attendance";
+import Notices from "./pages/Notices";
+import Events from "./pages/Events";
+import Chat from "./pages/Chat";
 import NotFound from "./pages/NotFound";
 import BottomNav from "./components/BottomNav";
 
@@ -40,10 +44,14 @@ const AppContent = () => {
         <Route path="/cab-sharing" element={<CabSharing />} />
         <Route path="/complaints" element={<Complaints />} />
         <Route path="/elections" element={<Elections />} />
-        <Route path="/gate-logs" element={<GateLogs />} />
-        <Route path="/lost-found" element={<LostFound />} />
-        <Route path="/quick-links" element={<QuickLinks />} />
-        <Route path="*" element={<NotFound />} />
+          <Route path="/gate-logs" element={<GateLogs />} />
+          <Route path="/lost-found" element={<LostFound />} />
+          <Route path="/quick-links" element={<QuickLinks />} />
+          <Route path="/attendance" element={<Attendance />} />
+          <Route path="/notices" element={<Notices />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="*" element={<NotFound />} />
       </Routes>
       {showBottomNav && <BottomNav />}
     </>
