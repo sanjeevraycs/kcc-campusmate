@@ -14,7 +14,412 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      cab_sharing: {
+        Row: {
+          cost_per_person: number | null
+          created_at: string
+          departure_time: string
+          destination: string
+          id: string
+          ride_type: string
+          seats_available: number | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          cost_per_person?: number | null
+          created_at?: string
+          departure_time: string
+          destination: string
+          id?: string
+          ride_type: string
+          seats_available?: number | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          cost_per_person?: number | null
+          created_at?: string
+          departure_time?: string
+          destination?: string
+          id?: string
+          ride_type?: string
+          seats_available?: number | null
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      candidates: {
+        Row: {
+          created_at: string
+          election_id: string | null
+          id: string
+          manifesto: string | null
+          photo_url: string | null
+          position: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          election_id?: string | null
+          id?: string
+          manifesto?: string | null
+          photo_url?: string | null
+          position: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          election_id?: string | null
+          id?: string
+          manifesto?: string | null
+          photo_url?: string | null
+          position?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidates_election_id_fkey"
+            columns: ["election_id"]
+            isOneToOne: false
+            referencedRelation: "elections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      complaints: {
+        Row: {
+          category: string
+          created_at: string
+          description: string
+          id: string
+          images: string[] | null
+          is_anonymous: boolean | null
+          priority: string | null
+          status: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description: string
+          id?: string
+          images?: string[] | null
+          is_anonymous?: boolean | null
+          priority?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          images?: string[] | null
+          is_anonymous?: boolean | null
+          priority?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      courses: {
+        Row: {
+          course_code: string
+          course_name: string
+          created_at: string
+          credits: number | null
+          id: string
+          professor: string | null
+          semester: string | null
+        }
+        Insert: {
+          course_code: string
+          course_name: string
+          created_at?: string
+          credits?: number | null
+          id?: string
+          professor?: string | null
+          semester?: string | null
+        }
+        Update: {
+          course_code?: string
+          course_name?: string
+          created_at?: string
+          credits?: number | null
+          id?: string
+          professor?: string | null
+          semester?: string | null
+        }
+        Relationships: []
+      }
+      elections: {
+        Row: {
+          created_at: string
+          description: string | null
+          end_date: string
+          id: string
+          start_date: string
+          status: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          end_date: string
+          id?: string
+          start_date: string
+          status?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          end_date?: string
+          id?: string
+          start_date?: string
+          status?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      gate_logs: {
+        Row: {
+          created_at: string
+          entry_type: string
+          id: string
+          location: string | null
+          timestamp: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          entry_type: string
+          id?: string
+          location?: string | null
+          timestamp?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          entry_type?: string
+          id?: string
+          location?: string | null
+          timestamp?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      lost_found: {
+        Row: {
+          category: string
+          created_at: string
+          description: string
+          id: string
+          images: string[] | null
+          item_type: string
+          location: string | null
+          status: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description: string
+          id?: string
+          images?: string[] | null
+          item_type: string
+          location?: string | null
+          status?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          images?: string[] | null
+          item_type?: string
+          location?: string | null
+          status?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      marketplace: {
+        Row: {
+          category: string
+          condition: string | null
+          created_at: string
+          description: string
+          id: string
+          images: string[] | null
+          price: number
+          status: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          condition?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          images?: string[] | null
+          price: number
+          status?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          condition?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          images?: string[] | null
+          price?: number
+          status?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          course: string | null
+          created_at: string
+          department: string | null
+          full_name: string
+          id: string
+          phone_number: string
+          roll_number: string
+          updated_at: string
+          user_id: string
+          year: number | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          course?: string | null
+          created_at?: string
+          department?: string | null
+          full_name: string
+          id?: string
+          phone_number: string
+          roll_number: string
+          updated_at?: string
+          user_id: string
+          year?: number | null
+        }
+        Update: {
+          avatar_url?: string | null
+          course?: string | null
+          created_at?: string
+          department?: string | null
+          full_name?: string
+          id?: string
+          phone_number?: string
+          roll_number?: string
+          updated_at?: string
+          user_id?: string
+          year?: number | null
+        }
+        Relationships: []
+      }
+      timetable: {
+        Row: {
+          course_id: string | null
+          created_at: string
+          day_of_week: string
+          end_time: string
+          id: string
+          room_number: string | null
+          start_time: string
+          user_id: string
+        }
+        Insert: {
+          course_id?: string | null
+          created_at?: string
+          day_of_week: string
+          end_time: string
+          id?: string
+          room_number?: string | null
+          start_time: string
+          user_id: string
+        }
+        Update: {
+          course_id?: string | null
+          created_at?: string
+          day_of_week?: string
+          end_time?: string
+          id?: string
+          room_number?: string | null
+          start_time?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "timetable_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      votes: {
+        Row: {
+          candidate_id: string | null
+          created_at: string
+          election_id: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          candidate_id?: string | null
+          created_at?: string
+          election_id?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          candidate_id?: string | null
+          created_at?: string
+          election_id?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "votes_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "votes_election_id_fkey"
+            columns: ["election_id"]
+            isOneToOne: false
+            referencedRelation: "elections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
