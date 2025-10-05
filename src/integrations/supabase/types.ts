@@ -647,6 +647,54 @@ export type Database = {
         }
         Relationships: []
       }
+      users: {
+        Row: {
+          created_at: string
+          current_otp: string | null
+          department: string | null
+          email: string | null
+          id: string
+          is_verified: boolean | null
+          name: string
+          otp_expires_at: string | null
+          phone_number: string
+          roll_number: string
+          section: string | null
+          updated_at: string
+          year: string | null
+        }
+        Insert: {
+          created_at?: string
+          current_otp?: string | null
+          department?: string | null
+          email?: string | null
+          id?: string
+          is_verified?: boolean | null
+          name: string
+          otp_expires_at?: string | null
+          phone_number: string
+          roll_number: string
+          section?: string | null
+          updated_at?: string
+          year?: string | null
+        }
+        Update: {
+          created_at?: string
+          current_otp?: string | null
+          department?: string | null
+          email?: string | null
+          id?: string
+          is_verified?: boolean | null
+          name?: string
+          otp_expires_at?: string | null
+          phone_number?: string
+          roll_number?: string
+          section?: string | null
+          updated_at?: string
+          year?: string | null
+        }
+        Relationships: []
+      }
       votes: {
         Row: {
           candidate_id: string | null
