@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 
 const VerifyOTP = () => {
   const [otp, setOtp] = useState("");
@@ -14,132 +13,29 @@ const VerifyOTP = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
-  const phoneNumber = location.state?.phoneNumber || "";
-  const userId = location.state?.userId || "";
-  const isSignup = location.state?.isSignup || false;
-
-  useEffect(() => {
-    if (resendTimer > 0) {
-      const timer = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [resendTimer]);
+  const rollNumber = location.state?.rollNumber || "";
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (otp.length !== 6) {
-      toast({
-        title: "Invalid OTP",
-        description: "Please enter a valid 6-digit OTP.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setIsLoading(true);
 
-    try {
-      const { data: user, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("phone_number", phoneNumber)
-        .maybeSingle();
-
-      if (error) throw error;
-
-      if (!user) {
-        toast({
-          title: "User Not Found",
-          description: "Please try logging in again.",
-          variant: "destructive",
-        });
-        navigate("/login");
-        return;
-      }
-
-      if (user.current_otp !== otp) {
-        toast({
-          title: "Invalid OTP",
-          description: "The OTP you entered is incorrect. Please try again.",
-          variant: "destructive",
-        });
-        setIsLoading(false);
-        return;
-      }
-
-      const now = new Date();
-      const expiresAt = new Date(user.otp_expires_at);
-
-      if (now > expiresAt) {
-        toast({
-          title: "OTP Expired",
-          description: "Your OTP has expired. Please request a new one.",
-          variant: "destructive",
-        });
-        setIsLoading(false);
-        return;
-      }
-
-      const { error: updateError } = await supabase
-        .from("users")
-        .update({
-          is_verified: true,
-          current_otp: null,
-          otp_expires_at: null,
-        })
-        .eq("id", user.id);
-
-      if (updateError) throw updateError;
-
-      localStorage.setItem("userId", user.id);
-      localStorage.setItem("userPhone", user.phone_number);
-      localStorage.setItem("userName", user.name);
-
+    // Simulate OTP verification
+    setTimeout(() => {
+      setIsLoading(false);
       toast({
         title: "Success!",
-        description: isSignup ? "Account created successfully!" : "Login successful!",
+        description: "You've been successfully verified.",
       });
-
       navigate("/dashboard");
-    } catch (error: any) {
-      toast({
-        title: "Verification Failed",
-        description: error.message || "An error occurred. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    }, 1500);
   };
 
-  const handleResend = async () => {
-    try {
-      const otp = Math.floor(100000 + Math.random() * 900000).toString();
-      const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
-
-      const { error } = await supabase
-        .from("users")
-        .update({
-          current_otp: otp,
-          otp_expires_at: otpExpiresAt,
-        })
-        .eq("phone_number", phoneNumber);
-
-      if (error) throw error;
-
-      toast({
-        title: "OTP Sent",
-        description: `New verification code ${otp} sent to ${phoneNumber}`,
-      });
-      setResendTimer(30);
-    } catch (error: any) {
-      toast({
-        title: "Failed to Resend",
-        description: error.message || "An error occurred. Please try again.",
-        variant: "destructive",
-      });
-    }
+  const handleResend = () => {
+    toast({
+      title: "OTP Sent",
+      description: "A new verification code has been sent.",
+    });
+    setResendTimer(30);
   };
 
   return (
@@ -159,7 +55,7 @@ const VerifyOTP = () => {
             <CardTitle>Verify OTP</CardTitle>
             <CardDescription>
               Enter the 6-digit code sent to your registered phone number
-              {phoneNumber && <span className="block mt-1 font-medium text-foreground">{phoneNumber}</span>}
+              {rollNumber && <span className="block mt-1 font-medium text-foreground">{rollNumber}</span>}
             </CardDescription>
           </CardHeader>
           <CardContent>
